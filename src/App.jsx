@@ -212,72 +212,71 @@ const technologies = [
   ];
 
   const projects = [
-    {
-      name: "E-Commerce Website",
-      description: "Complete e-commerce platform with admin dashboard, PayPal payment system, and product management. Features secure authentication and advanced search functionality.",
-      technologies: ["React", "Node.js", "Express", "MongoDB", "Redux", "PayPal API"],
-      github: "https://github.com/hamzakh86/codealpha-s-ecommerce",
-      demo: "https://ecommerce-demo-hamza.netlify.app",
-      image: "/project1.png"
-    },
-    {
-      name: "Project Management Website (TeamSpace)",
-      description: "Trello-inspired task management application with real-time collaboration features. Allows creation of customizable workspaces and deadline tracking.",
-      technologies: ["React", "Node.js", "MongoDB", "Express", "WebSockets"],
-      github: "https://github.com/hamzakh86/codealpha-teamspace",
-      demo: "https://teamspace-demo.netlify.app",
-      image: "/project2.png"
-    },
-    {
-      name: "Social Media Website (SocialWave)",
-      description: "Complete social network with posts, comments, and likes system. Features user following functionality and content moderation tools.",
-      technologies: ["MERN Stack", "JWT", "Redux Toolkit", "Mongoose"],
-      github: "https://github.com/hamzakh86/codeAlpha-SocialWave",
-      demo: "https://socialwave-demo.herokuapp.com",
-      image: "/project3.png"
-    },
-    {
-      name: "Modern Real Estate Marketplace",
-      description: "Real estate marketplace with CRUD property management, image upload, and advanced search. Secured with JWT and optimized with Redux Toolkit.",
-      technologies: ["MERN Stack", "JWT", "Redux Toolkit", "Cloudinary"],
-      github: "https://github.com/hamzakh86/A-modern-real-estate-",
-      demo: "https://hamza-estate.onrender.com",
-      image: "/project4.png"
-    },
-    {
-      name: "Portfolio Website",
-      description: "Modern portfolio with interactive animations using Three.js and Framer Motion. Responsive design optimized for all screen sizes with functional contact form.",
-      technologies: ["React", "Three.js", "Framer Motion", "Tailwind CSS", "EmailJS"],
-      github: "https://github.com/hamzakh86/PRODIGY_WD_04",
-      demo: "https://hamza-khaled.netlify.app",
-      image: "/project5.png"
-    },
-    {
-      name: "Responsive Landing Page (AI Revolution)",
-      description: "Professional homepage for an AI platform with interactive data visualizations. Responsive design with theme switching and smooth animations.",
-      technologies: ["React", "Tailwind CSS", "Framer Motion", "Recharts"],
-      github: "https://github.com/hamzakh86/PRODIGY_WD_01",
-      demo: "https://ia-revolution.netlify.app",
-      image: "/project6.png"
-    },
-    {
-      name: "Stopwatch Web Application (Chrono Elite Pro)",
-      description: "Professional stopwatch with lap system, advanced statistics, and CSV export. Supports keyboard shortcuts and hundredth-second precision.",
-      technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
-      github: "https://github.com/hamzakh86/PRODIGY_WD_02",
-      demo: "https://chrono-elite-pro.netlify.app",
-      image: "/project7.png"
-    },
-    {
-      name: "Tic-Tac-Toe Web Application",
-      description: "Interactive Tic-Tac-Toe game with AI at multiple difficulty levels. Features game statistics tracking and responsive UI.",
-      technologies: ["React", "Vite", "Tailwind CSS", "Shadcn/ui"],
-      github: "https://github.com/hamzakh86/PRODIGY_WD_03",
-      demo: "https://game-tic-tac-toeh.netlify.app",
-      image: "/project8.png"
-    },
-  ];
-
+  {
+    name: "E-Commerce Website (Hachka Shopping)",
+    description: "Complete e-commerce platform with admin dashboard, payment system, and product management. Features secure authentication and advanced search functionality.",
+    technologies: ["React", "Node.js", "Express", "MongoDB", "Redux", "PayPal API"],
+    github: "https://github.com/hamzakh86/codealpha-s-ecommerce",
+    demo: "https://hachkashopping.netlify.app",
+    image: "/project1.png"
+  },
+  {
+    name: "Project Management Website (TeamSpace)",
+    description: "Trello-inspired task management application with real-time collaboration features. Allows creation of customizable workspaces and deadline tracking.",
+    technologies: ["React", "Node.js", "MongoDB", "Express", "WebSockets"],
+    github: "https://github.com/hamzakh86/codealpha-teamspace",
+    demo: "https://teamspaces.netlify.app",
+    image: "/project2.png"
+  },
+  {
+    name: "Social Media Website (SocialWave)",
+    description: "Complete social network with posts, comments, and likes system. Features user following functionality and content moderation tools.",
+    technologies: ["MERN Stack", "JWT", "Redux Toolkit", "Mongoose"],
+    github: "https://github.com/hamzakh86/codeAlpha-SocialWave",
+    demo: "https://socialwav.netlify.app",
+    image: "/project3.png"
+  },
+  {
+    name: "Modern Real Estate Marketplace",
+    description: "Real estate marketplace with CRUD property management, image upload, and advanced search. Secured with JWT and optimized with Redux Toolkit.",
+    technologies: ["MERN Stack", "JWT", "Redux Toolkit", "Cloudinary"],
+    github: "https://github.com/hamzakh86/A-modern-real-estate-",
+    demo: "https://hamzaestate.netlify.app",
+    image: "/project4.png"
+  },
+  {
+    name: "Portfolio Website",
+    description: "Modern portfolio with interactive animations using Three.js and Framer Motion. Responsive design optimized for all screen sizes with functional contact form.",
+    technologies: ["React", "Three.js", "Framer Motion", "Tailwind CSS", "EmailJS"],
+    github: "https://github.com/hamzakh86/PRODIGY_WD_04",
+    demo: "https://hamza-khaled.netlify.app",
+    image: "/project5.png"
+  },
+  {
+    name: "Responsive Landing Page (AI Revolution)",
+    description: "Professional homepage for an AI platform with interactive data visualizations. Responsive design with theme switching and smooth animations.",
+    technologies: ["React", "Tailwind CSS", "Framer Motion", "Recharts"],
+    github: "https://github.com/hamzakh86/PRODIGY_WD_01",
+    demo: "https://ia-revolution.netlify.app",
+    image: "/project6.png"
+  },
+  {
+    name: "Stopwatch Web Application (Chrono Elite Pro)",
+    description: "Professional stopwatch with lap system, advanced statistics, and CSV export. Supports keyboard shortcuts and hundredth-second precision.",
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    github: "https://github.com/hamzakh86/PRODIGY_WD_02",
+    demo: "https://chrono-elite-pro.netlify.app",
+    image: "/project7.png"
+  },
+  {
+    name: "Tic-Tac-Toe Web Application",
+    description: "Interactive Tic-Tac-Toe game with AI at multiple difficulty levels. Features game statistics tracking and responsive UI.",
+    technologies: ["React", "Vite", "Tailwind CSS", "Shadcn/ui"],
+    github: "https://github.com/hamzakh86/PRODIGY_WD_03",
+    demo: "https://game-tic-tac-toeh.netlify.app",
+    image: "/project8.png"
+  },
+];
   const certifications = [
     {
       title: "GOMYCODE",
