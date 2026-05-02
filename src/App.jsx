@@ -299,7 +299,7 @@ const technologies = [
     {
       title: "Postman",
       description: "Postman API Fundamentals Student Expert",
-      link: "https://badgr.com/print-certificate/66a41b7a1ea7d93715e019af",
+      link: "https://badges.parchment.com/print-certificate/66a41b7a1ea7d93715e019af",
       image: certification6
     },
     {
