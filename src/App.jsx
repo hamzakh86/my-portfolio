@@ -62,22 +62,27 @@ import fullstackLogo from './assets/fullstack-logo.png';
 import frontendLogo from './assets/frontend-logo.png';
 import backendLogo from './assets/backend-logo.png';
 import reactNativeLogo from './assets/react-native-logo.png';
-import htmlLogo from './assets/html.webp';
-import cssLogo from './assets/css.webp';
-import jsLogo from './assets/javascript.webp';
-import reactLogo from './assets/reactjs.webp';
-import typescriptLogo from './assets/typescript.webp';
-import nodejsLogo from './assets/nodejs.webp';
-import mongodbLogo from './assets/mongodb.webp';
-import tailwindLogo from './assets/tailwind.webp';
-import reduxLogo from './assets/redux.webp';
-import threejsLogo from './assets/threejs.webp';
-import gitLogo from './assets/git.webp';
-import nextLogo from './assets/next.webp';
-import nestLogo from './assets/nest.webp';
-
 import './App.css';
 import { Database } from 'lucide-react';
+
+const roles = [
+  "Full Stack JS Developer",
+  "Freelancer",
+  "Frontend Developer",
+  "Backend Developer",
+  "Mobile Developer"
+];
+
+const navItems = [
+  { id: 'hero', label: 'Home', icon: User },
+  { id: 'about', label: 'About', icon: User },
+  { id: 'experience', label: 'Experience', icon: Briefcase },
+  { id: 'technologies', label: 'Technologies', icon: Code },
+  { id: 'projects', label: 'Projects', icon: Code },
+  { id: 'certifications', label: 'Certifications', icon: Award },
+  { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
+  { id: 'contact', label: 'Contact', icon: Mail }
+];
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -97,25 +102,6 @@ const App = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertifications, setShowAllCertifications] = useState(false);
   const [showAllTestimonials, setShowAllTestimonials] = useState(false);
-
-  const roles = [
-    "Full Stack JS Developer",
-    "Freelancer",
-    "Frontend Developer",
-    "Backend Developer",
-    "Mobile Developer"
-  ];
-
-  const navItems = [
-    { id: 'hero', label: 'Home', icon: User },
-    { id: 'about', label: 'About', icon: User },
-    { id: 'experience', label: 'Experience', icon: Briefcase },
-    { id: 'technologies', label: 'Technologies', icon: Code },
-    { id: 'projects', label: 'Projects', icon: Code },
-    { id: 'certifications', label: 'Certifications', icon: Award },
-    { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
-    { id: 'contact', label: 'Contact', icon: Mail }
-  ];
 
   const services = [
     {
