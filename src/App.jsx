@@ -156,6 +156,28 @@ const App = () => {
     }
   }, [isDarkMode]);
 
+  /* ── Intersection Observer — scroll-reveal ── */
+  useEffect(() => {
+    const revealClasses = ['.reveal', '.reveal-left', '.reveal-right', '.reveal-scale', '.exp-card-left', '.exp-card-right', '.section-title'];
+    const allElements = document.querySelectorAll(revealClasses.join(','));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible');
+            observer.unobserve(entry.target); // animate only once
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    allElements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [showAllProjects, showAllCertifications, showAllTestimonials]);
+  // Re-run when "show more" items appear so newly added cards get observed
+
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
   const scrollToSection = (sectionId) => {
@@ -164,6 +186,22 @@ const App = () => {
       const element = document.getElementById(sectionId);
       if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+  };
+
+  /* ── Collapse a "show more" section and scroll back to its top ── */
+  const handleCollapse = (setter, sectionId) => {
+    setter(false);
+    // Wait one frame for React to re-render with fewer items, then scroll
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) {
+          const offset = 80; // navbar height
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }, 50);
+    });
   };
 
   const downloadCV = (language = 'english') => {
@@ -568,8 +606,8 @@ const App = () => {
       <section id="about" className="py-32 bg-card">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">About Me</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">About Me</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground max-w-3xl mx-auto">
               I'm a skilled software developer with experience in TypeScript and JavaScript,
               and expertise in frameworks like React.js, Next.js, Node.js, Nest.js, and Three.js.
               Currently pursuing my engineering degree at{' '}
@@ -582,18 +620,20 @@ const App = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service) => (
-              <Card key={service.title} className="h-full hover:shadow-lg transition-shadow">
-                <CardHeader className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full flex items-center justify-center">
-                    <img src={service.logo} alt={service.title} className="w-10 h-10 object-contain" />
-                  </div>
-                  <CardTitle className="text-lg">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-center">{service.description}</CardDescription>
-                </CardContent>
-              </Card>
+            {services.map((service, i) => (
+              <div key={service.title} className={`reveal reveal-scale reveal-d${i + 1}`}>
+                <Card className="h-full card-hover">
+                  <CardHeader className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full flex items-center justify-center">
+                      <img src={service.logo} alt={service.title} className="w-10 h-10 object-contain" />
+                    </div>
+                    <CardTitle className="text-lg">{service.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-center">{service.description}</CardDescription>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -603,14 +643,14 @@ const App = () => {
       <section id="experience" className="py-20">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Work Experience</h2>
-            <p className="text-lg text-muted-foreground">My professional journey</p>
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">Work Experience</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground">My professional journey</p>
           </div>
 
           {/* Mobile timeline */}
           <div className="md:hidden space-y-8">
             {experiences.map((exp, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative reveal">
                 <div className="absolute left-5 top-6 h-full w-0.5 bg-primary/20">
                   {index < experiences.length - 1 && (
                     <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-primary to-transparent" />
@@ -620,7 +660,7 @@ const App = () => {
                   <div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
                     <div className="h-3 w-3 rounded-full bg-primary" />
                   </div>
-                  <Card className="overflow-hidden">
+                  <Card className="overflow-hidden card-hover">
                     <div className="flex items-center gap-4 p-4 border-b">
                       <img src={exp.logo} alt={exp.company} className="h-12 w-12 object-contain rounded-md" />
                       <div>
@@ -654,10 +694,10 @@ const App = () => {
               <div className="space-y-8">
                 {experiences.map((exp, index) => (
                   <div key={index} className={`relative flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}>
-                    <div className="absolute left-1/2 top-2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-primary/10">
+                    <div className="absolute left-1/2 top-2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-primary/10 timeline-dot">
                       <div className="h-3 w-3 rounded-full bg-primary" />
                     </div>
-                    <Card className={`w-full max-w-2xl ${index % 2 === 0 ? 'mr-auto' : 'ml-auto'}`}>
+                    <Card className={`w-full max-w-2xl card-hover ${index % 2 === 0 ? 'mr-auto exp-card-left' : 'ml-auto exp-card-right'}`}>
                       <div className="flex items-center gap-4 p-6 pb-4">
                         <img src={exp.logo} alt={exp.company} className="h-14 w-14 object-contain rounded-md" />
                         <div>
@@ -692,18 +732,22 @@ const App = () => {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Technologies & Tools
             </h2>
-            <p className="text-lg text-muted-foreground">My technical expertise</p>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground">My technical expertise</p>
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-4 justify-items-center">
-            {technologies.map((tech) => (
-              <div key={tech.name} className="group relative flex flex-col items-center">
+            {technologies.map((tech, i) => (
+              <div
+                key={tech.name}
+                className="reveal reveal-scale tech-icon-wrap group relative flex flex-col items-center"
+                style={{ transitionDelay: `${(i % 8) * 0.06}s` }}
+              >
                 <div className={`relative w-14 h-14 md:w-16 md:h-16 mx-auto mb-2 rounded-xl bg-gradient-to-br ${tech.color} p-0.5 shadow-lg`}>
                   <div className="w-full h-full bg-background/90 backdrop-blur-sm rounded-xl flex items-center justify-center relative overflow-hidden">
                     <div className={`absolute inset-0 bg-gradient-to-br ${tech.color} opacity-20 group-hover:opacity-40 transition-opacity duration-300`} />
-                    <img src={tech.icon} alt={tech.name} className="w-8 h-8 md:w-10 md:h-10 object-contain relative z-10 group-hover:scale-110 transition-transform duration-300" />
+                    <img src={tech.icon} alt={tech.name} className="w-8 h-8 md:w-10 md:h-10 object-contain relative z-10 transition-transform duration-300" />
                   </div>
                 </div>
                 <h3 className="text-xs font-medium text-center text-foreground group-hover:text-primary transition-colors duration-300">
@@ -719,8 +763,8 @@ const App = () => {
       <section id="projects" className="py-20">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Projects</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">Projects</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground max-w-3xl mx-auto">
               Following projects showcase my skills and experience through real-world examples of my work.
               Each project is briefly described with links to code repositories and live demos.
               It reflects my ability to solve complex problems, work with different technologies,
@@ -728,40 +772,60 @@ const App = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(showAllProjects ? projects : projects.slice(0, 3)).map((project) => (
-              <Card key={project.name} className="h-full hover:shadow-lg transition-shadow">
-                {project.image && (
-                  <div className="w-full h-48 overflow-hidden rounded-t-lg">
-                    <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="text-lg">{project.name}</CardTitle>
-                  <CardDescription className="text-sm">{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech) => (
-                      <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={() => window.open(project.github, '_blank')}>
-                      <Github className="w-4 h-4 mr-2" />Code
-                    </Button>
-                    {project.demo && (
-                      <Button size="sm" onClick={() => window.open(project.demo, '_blank')}>
-                        <ExternalLink className="w-4 h-4 mr-2" />Demo
+            {(showAllProjects ? projects : projects.slice(0, 3)).map((project, i) => (
+              <div
+                key={project.name}
+                className="reveal card-hover"
+                style={{ transitionDelay: `${(i % 3) * 0.12}s` }}
+              >
+                <Card className="h-full overflow-hidden">
+                  {project.image && (
+                    <div className="w-full h-48 overflow-hidden rounded-t-lg">
+                      <img
+                        src={project.image}
+                        alt={project.name}
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <CardHeader>
+                    <CardTitle className="text-lg">{project.name}</CardTitle>
+                    <CardDescription className="text-sm">{project.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.map((tech) => (
+                        <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => window.open(project.github, '_blank')}>
+                        <Github className="w-4 h-4 mr-2" />Code
                       </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+                      {project.demo && (
+                        <Button size="sm" onClick={() => window.open(project.demo, '_blank')}>
+                          <ExternalLink className="w-4 h-4 mr-2" />Demo
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
           {projects.length > 3 && (
-            <div className="text-center mt-12">
-              <Button onClick={() => setShowAllProjects(!showAllProjects)} variant="outline" size="lg">
+            <div className="reveal text-center mt-12">
+              <Button
+                onClick={() => {
+                  if (showAllProjects) {
+                    handleCollapse(setShowAllProjects, 'projects');
+                  } else {
+                    setShowAllProjects(true);
+                  }
+                }}
+                variant="outline"
+                size="lg"
+              >
                 {showAllProjects ? 'Show Less' : 'Show More'}
                 <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${showAllProjects ? 'rotate-180' : ''}`} />
               </Button>
@@ -774,37 +838,53 @@ const App = () => {
       <section id="certifications" className="py-20 bg-card">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Certifications</h2>
-            <p className="text-lg text-muted-foreground">Professional certifications and achievements</p>
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">Certifications</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground">Professional certifications and achievements</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(showAllCertifications ? certifications : certifications.slice(0, 3)).map((cert, index) => (
-              <Card key={index} className="h-full hover:shadow-lg transition-shadow">
-                {cert.image && (
-                  <div className="w-full h-auto overflow-hidden rounded-t-lg bg-white flex items-center justify-center">
-                    <img src={cert.image} alt={cert.title} className="w-full h-full object-contain" />
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center">
-                    <Award className="w-5 h-5 mr-2 text-primary" />
-                    {cert.title}
-                  </CardTitle>
-                  <CardDescription>{cert.description}</CardDescription>
-                </CardHeader>
-                {cert.link && (
-                  <CardContent>
-                    <Button variant="outline" size="sm" onClick={() => window.open(cert.link, '_blank')}>
-                      <ExternalLink className="w-4 h-4 mr-2" />View Certificate
-                    </Button>
-                  </CardContent>
-                )}
-              </Card>
+              <div
+                key={index}
+                className="reveal card-hover"
+                style={{ transitionDelay: `${(index % 3) * 0.12}s` }}
+              >
+                <Card className="h-full">
+                  {cert.image && (
+                    <div className="w-full h-auto overflow-hidden rounded-t-lg bg-white flex items-center justify-center">
+                      <img src={cert.image} alt={cert.title} className="w-full h-full object-contain" />
+                    </div>
+                  )}
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center">
+                      <Award className="w-5 h-5 mr-2 text-primary" />
+                      {cert.title}
+                    </CardTitle>
+                    <CardDescription>{cert.description}</CardDescription>
+                  </CardHeader>
+                  {cert.link && (
+                    <CardContent>
+                      <Button variant="outline" size="sm" onClick={() => window.open(cert.link, '_blank')}>
+                        <ExternalLink className="w-4 h-4 mr-2" />View Certificate
+                      </Button>
+                    </CardContent>
+                  )}
+                </Card>
+              </div>
             ))}
           </div>
           {certifications.length > 3 && (
-            <div className="text-center mt-12">
-              <Button onClick={() => setShowAllCertifications(!showAllCertifications)} variant="outline" size="lg">
+            <div className="reveal text-center mt-12">
+              <Button
+                onClick={() => {
+                  if (showAllCertifications) {
+                    handleCollapse(setShowAllCertifications, 'certifications');
+                  } else {
+                    setShowAllCertifications(true);
+                  }
+                }}
+                variant="outline"
+                size="lg"
+              >
                 {showAllCertifications ? 'Show Less' : 'Show More'}
                 <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${showAllCertifications ? 'rotate-180' : ''}`} />
               </Button>
@@ -817,33 +897,53 @@ const App = () => {
       <section id="testimonials" className="py-20">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Testimonials</h2>
-            <p className="text-lg text-muted-foreground">What others say about my work</p>
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">Testimonials</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground">What others say about my work</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(showAllTestimonials ? testimonials : testimonials.slice(0, 3)).map((testimonial, index) => (
-              <Card key={index} className="h-full">
-                <CardContent className="pt-6">
-                  <div className="flex mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                    ))}
-                  </div>
-                  <p className="text-muted-foreground mb-4 italic">"{testimonial.content}"</p>
-                  <div className="flex items-center">
-                    <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full object-cover mr-4" />
-                    <div>
-                      <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+              <div
+                key={index}
+                className="reveal card-hover"
+                style={{ transitionDelay: `${(index % 3) * 0.13}s` }}
+              >
+                <Card className="h-full">
+                  <CardContent className="pt-6">
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="star-animated w-4 h-4 fill-primary text-primary" />
+                      ))}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                    <p className="text-muted-foreground mb-4 italic">"{testimonial.content}"</p>
+                    <div className="flex items-center">
+                      <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="w-12 h-12 rounded-full object-cover mr-4 ring-2 ring-border"
+                      />
+                      <div>
+                        <p className="font-semibold">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
           {testimonials.length > 3 && (
-            <div className="text-center mt-12">
-              <Button onClick={() => setShowAllTestimonials(!showAllTestimonials)} variant="outline" size="lg">
+            <div className="reveal text-center mt-12">
+              <Button
+                onClick={() => {
+                  if (showAllTestimonials) {
+                    handleCollapse(setShowAllTestimonials, 'testimonials');
+                  } else {
+                    setShowAllTestimonials(true);
+                  }
+                }}
+                variant="outline"
+                size="lg"
+              >
                 {showAllTestimonials ? 'Show Less' : 'Show More'}
                 <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${showAllTestimonials ? 'rotate-180' : ''}`} />
               </Button>
@@ -856,12 +956,12 @@ const App = () => {
       <section id="contact" className="py-20 bg-card">
         <div className="max-w-full mx-auto px-2 sm:px-3 lg:px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Get In Touch</h2>
-            <p className="text-lg text-muted-foreground">Have a project in mind? Don't hesitate to contact me!</p>
+            <h2 className="section-title reveal text-3xl sm:text-4xl font-bold mb-4">Get In Touch</h2>
+            <p className="reveal reveal-d2 text-lg text-muted-foreground">Have a project in mind? Don't hesitate to contact me!</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8">
-            <div>
-              <Card className="h-full">
+            <div className="reveal-left">
+              <Card className="h-full contact-card-glow">
                 <CardHeader>
                   <CardTitle>Send me a message</CardTitle>
                   <CardDescription>I'll get back to you as soon as possible</CardDescription>
@@ -891,8 +991,8 @@ const App = () => {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
+            <div className="reveal-right grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="card-hover">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center"><Mail className="w-5 h-5 mr-2" />Email me at</CardTitle>
                 </CardHeader>
@@ -907,7 +1007,7 @@ const App = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-hover">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center"><MessageSquare className="w-5 h-5 mr-2" />Socials</CardTitle>
                 </CardHeader>
@@ -923,7 +1023,7 @@ const App = () => {
                       <button
                         key={index}
                         onClick={() => window.open(social.url, '_blank')}
-                        className="w-10 h-10 bg-accent rounded-md flex items-center justify-center hover:bg-accent/80 transition-colors"
+                        className="w-10 h-10 bg-accent rounded-md flex items-center justify-center hover:bg-accent/80 hover:scale-110 transition-all duration-200"
                         aria-label={social.label}
                       >
                         <social.icon className="w-5 h-5" />
@@ -933,7 +1033,7 @@ const App = () => {
                 </CardContent>
               </Card>
 
-              <Card className="md:col-span-2">
+              <Card className="md:col-span-2 card-hover">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center"><MapPin className="w-5 h-5 mr-2" />Location</CardTitle>
                 </CardHeader>
