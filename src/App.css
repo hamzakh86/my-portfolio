@@ -43,7 +43,7 @@
 
 :root {
   --radius: 0.625rem;
-  
+
   /* Custom Portfolio Color Palette */
   --portfolio-dark-blue: #213448;
   --portfolio-light-blue: #547792;
@@ -127,7 +127,7 @@
     @apply bg-background text-foreground;
     max-width: 100%;
     overflow-x: hidden;
-    overflow-y: auto; /* Assure le défilement vertical */
+    overflow-y: auto;
   }
 
   #root {
@@ -136,58 +136,289 @@
   }
 }
 
-/* Custom Animations */
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.7; }
+  100% { transform: scale(1.45); opacity: 0;   }
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+@keyframes spin-slow {
+  from { transform: rotate(0deg);   }
+  to   { transform: rotate(360deg); }
 }
 
-/* Gradient Text */
+@keyframes counter-spin {
+  from { transform: rotate(0deg);    }
+  to   { transform: rotate(-360deg); }
+}
+
+@keyframes typing-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes badge-pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+@keyframes shimmer-line {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0)    translateX(0)   scale(1);   opacity: 0.5; }
+  33%  { transform: translateY(-18px) translateX(8px)  scale(1.1); opacity: 0.9; }
+  66%  { transform: translateY(-8px)  translateX(-6px) scale(0.9); opacity: 0.7; }
+  100% { transform: translateY(0)    translateX(0)   scale(1);   opacity: 0.5; }
+}
+
+/* ============================================================
+   UTILITY ANIMATION CLASSES
+   ============================================================ */
+
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out both; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+
+/* Staggered entrance for Hero content */
+.animate-hero-1 { animation: fadeInUp 0.55s 0.00s ease both; }
+.animate-hero-2 { animation: fadeInUp 0.55s 0.10s ease both; }
+.animate-hero-3 { animation: fadeInUp 0.55s 0.20s ease both; }
+.animate-hero-4 { animation: fadeInUp 0.55s 0.32s ease both; }
+.animate-hero-5 { animation: fadeInUp 0.55s 0.44s ease both; }
+.animate-hero-6 { animation: fadeInUp 0.55s 0.56s ease both; }
+
+/* Avatar entrance from right */
+.animate-hero-avatar { animation: fadeInRight 0.7s 0.15s ease both; }
+
+/* Chip pop-in (used on the 3 floating chips around the avatar) */
+.animate-chip-1 { opacity: 0; animation: badge-pop 0.4s 0.70s ease forwards, float 6.0s 0.70s ease-in-out infinite; }
+.animate-chip-2 { opacity: 0; animation: badge-pop 0.4s 0.90s ease forwards, float 7.0s 1.00s ease-in-out infinite; }
+.animate-chip-3 { opacity: 0; animation: badge-pop 0.4s 1.10s ease forwards, float 5.5s 1.10s ease-in-out infinite; }
+
+/* Tech-stack badge pop (3 pills in the hero left column) */
+.animate-badge-1 { opacity: 0; animation: badge-pop 0.4s 0.35s ease forwards; }
+.animate-badge-2 { opacity: 0; animation: badge-pop 0.4s 0.50s ease forwards; }
+.animate-badge-3 { opacity: 0; animation: badge-pop 0.4s 0.65s ease forwards; }
+
+/* ============================================================
+   GRADIENT TEXT  (used on "Hamza Khaled")
+   ============================================================ */
+
 .gradient-text {
-  background: linear-gradient(135deg, var(--portfolio-dark-blue), var(--portfolio-light-blue));
+  background: linear-gradient(
+    135deg,
+    var(--portfolio-dark-blue),
+    var(--portfolio-light-blue),
+    var(--portfolio-accent-blue)
+  );
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: gradient-shift 5s ease infinite;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
+/* Dark-mode variant: brighter gradient so it pops on dark bg */
+.dark .gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--portfolio-off-white),
+    var(--portfolio-accent-blue),
+    var(--portfolio-light-blue)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* ============================================================
+   AVAILABLE DOT  (pulsing green dot in the "Available" badge)
+   ============================================================ */
+
+.available-dot {
+  display: inline-block;
   width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  position: relative;
+  flex-shrink: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--portfolio-off-white);
+.available-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse-ring 1.6s ease-out infinite;
 }
+
+/* ============================================================
+   TYPING CURSOR
+   ============================================================ */
+
+.typing-cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 1.15em;
+  background: var(--portfolio-light-blue);
+  margin-left: 3px;
+  vertical-align: middle;
+  border-radius: 1px;
+  animation: typing-cursor 0.85s step-end infinite;
+}
+
+/* ============================================================
+   AVATAR RINGS
+   ============================================================ */
+
+.avatar-ring-outer {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--portfolio-accent-blue);
+  opacity: 0.35;
+  animation: spin-slow 20s linear infinite;
+}
+
+.avatar-ring-inner {
+  position: absolute;
+  inset: -26px;
+  border-radius: 50%;
+  border: 1px dashed var(--portfolio-light-blue);
+  opacity: 0.2;
+  animation: counter-spin 28s linear infinite;
+}
+
+/* ============================================================
+   FLOATING CHIPS (around the avatar)
+   ============================================================ */
+
+.hero-chip {
+  position: absolute;
+  z-index: 20;
+  align-items: center;
+  gap: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  /* Hidden by default on mobile */
+  display: none;
+}
+
+/* Show chips only on desktop (≥1024px) */
+@media (min-width: 1024px) {
+  .hero-chip {
+    display: flex;
+  }
+}
+
+/* ============================================================
+   SHIMMER DIVIDER  (thin animated line between name and info)
+   ============================================================ */
+
+.shimmer-divider {
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--portfolio-accent-blue),
+    var(--portfolio-light-blue),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer-line 2.8s ease infinite;
+  opacity: 0.55;
+  margin: 20px 0 16px;
+}
+
+/* ============================================================
+   BACKGROUND PARTICLES  (subtle floating dots behind hero)
+   ============================================================ */
+
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ============================================================
+   AVATAR — RESPONSIVE
+   Mobile  : no extra padding, 220×220px circle, chips hidden via `hidden lg:flex`
+   Desktop : 80px left/right padding reserves space for the protruding chips
+   ============================================================ */
+
+/* Wrapper — mobile first (no padding) */
+.avatar-wrapper {
+  padding: 16px;
+}
+
+/* Avatar circle size — mobile */
+.avatar-circle-size {
+  width: 220px;
+  height: 220px;
+}
+
+/* Desktop (≥1024px) */
+@media (min-width: 1024px) {
+  .avatar-wrapper {
+    padding: 40px 100px 40px 40px; /* extra right space for the right-side chips */
+  }
+
+  .avatar-circle-size {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar { width: 8px; }
+
+::-webkit-scrollbar-track { background: var(--portfolio-off-white); }
 
 ::-webkit-scrollbar-thumb {
   background: var(--portfolio-accent-blue);
   border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--portfolio-light-blue);
-}
-
+::-webkit-scrollbar-thumb:hover { background: var(--portfolio-light-blue); }
