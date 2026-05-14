@@ -198,6 +198,29 @@ const technologies = [
   ];
 
   const projects = [
+{
+    name: "Hachka User - E-Commerce Website",
+    description: "AngularJS e-commerce website with product browsing, categories, advanced filters, shopping cart, and JWT authentication. Connected to centralized RESTful API backend.",
+    technologies: ["AngularJS", "JavaScript", "HTML5", "CSS3", "REST API", "JWT"],
+    github: "https://github.com/hamzakh86/HachkaWeb",
+    demo: "",
+    image: "/project11.png"
+},
+{
+    name: "Hachka Admin - Dashboard",
+    description: "AngularJS admin dashboard for complete CRUD operations on products (50+), categories, orders, and user management. Secure JWT authentication and role-based access control.",
+    technologies: ["AngularJS", "JavaScript", "Chart.js", "REST API", "JWT", "Bootstrap"],
+    github: "https://github.com/hamzakh86/hachkadashboard",
+    demo: "",
+    image: "/project10.png"
+},
+{
+    name: "Hachka Mobile - E-Commerce App",
+ description: "React Native mobile app with 15+ screens including product discovery, shopping cart, checkout, order tracking, and push notifications. Cross-platform iOS/Android solution.",    technologies: ["React Native", "Redux", "Node.js", "Express.js", "MongoDB", "JWT"],
+    github: "https://github.com/hamzakh86/HachkaMobileApp",
+    demo: "",
+    image: "/project9.png"
+},
   {
     name: "E-Commerce Website (Hachka Shopping)",
     description: "Complete e-commerce platform with admin dashboard, payment system, and product management. Features secure authentication and advanced search functionality.",
