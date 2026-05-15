@@ -231,10 +231,12 @@
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none; /* FIX: invisible elements are not clickable */
 }
 .reveal.reveal-visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 /* Directional variants */
@@ -242,30 +244,36 @@
   opacity: 0;
   transform: translateX(-44px);
   transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none; /* FIX */
 }
 .reveal-left.reveal-visible {
   opacity: 1;
   transform: translateX(0);
+  pointer-events: auto;
 }
 
 .reveal-right {
   opacity: 0;
   transform: translateX(44px);
   transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none; /* FIX */
 }
 .reveal-right.reveal-visible {
   opacity: 1;
   transform: translateX(0);
+  pointer-events: auto;
 }
 
 .reveal-scale {
   opacity: 0;
   transform: scale(0.88);
   transition: opacity 0.55s ease, transform 0.55s ease;
+  pointer-events: none; /* FIX */
 }
 .reveal-scale.reveal-visible {
   opacity: 1;
   transform: scale(1);
+  pointer-events: auto;
 }
 
 /* Stagger delays — add to children alongside reveal* class */
@@ -321,16 +329,19 @@
   opacity: 0;
   transform: translateX(-50px);
   transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none; /* FIX */
 }
 .exp-card-right {
   opacity: 0;
   transform: translateX(50px);
   transition: opacity 0.65s ease, transform 0.65s ease;
+  pointer-events: none; /* FIX */
 }
 .exp-card-left.reveal-visible,
 .exp-card-right.reveal-visible {
   opacity: 1;
   transform: translateX(0);
+  pointer-events: auto;
 }
 
 /* ── Star rating pop-in ── */
