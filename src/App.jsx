@@ -158,7 +158,9 @@ const App = () => {
         setRepos(JSON.parse(cached));
         setReposLoading(false);
         return;
-      } catch {}
+      } catch (e) {
+        // Invalid JSON in cache – ignore and fetch fresh data
+      }
     }
     const fetchRepos = async () => {
       try {
@@ -213,7 +215,7 @@ const App = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lang]);
+  }, [lang, navItems]);  // ✅ Fixed: added navItems dependency
 
   /* ── Dark mode ── */
   useEffect(() => {
@@ -247,9 +249,6 @@ const App = () => {
 
     return () => obs.disconnect();
   }, [showAllProjects, showAllCertifications, showAllTestimonials, showCaseStudy, repos, reposError]);
-  //                                                                                ^^^^^^^^^^^^^^^^^^^^
-  // FIX: repos et reposError ajoutés comme dépendances pour re-observer
-  // après que le fetch GitHub termine et que les cards sont rendues
 
   /* ── Stats counter ── */
   useEffect(() => {
