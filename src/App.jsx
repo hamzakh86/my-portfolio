@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import emailjs from '@emailjs/browser';
 import { GitHubCalendar } from 'react-github-calendar';
 import {
@@ -67,8 +67,8 @@ const LIGHTHOUSE = {
 const App = () => {
   const { lang, t, toggleLang } = useLanguage();
 
-  /* ── Nav items (uses t for labels) ── */
-  const navItems = [
+  /* ── Nav items (uses t for labels) – memoized to avoid recreating on every render ── */
+  const navItems = useMemo(() => [
     { id: 'hero',           label: t.nav.home },
     { id: 'about',          label: t.nav.about },
     { id: 'experience',     label: t.nav.experience },
@@ -79,7 +79,7 @@ const App = () => {
     { id: 'certifications', label: t.nav.certifications },
     { id: 'testimonials',   label: t.nav.testimonials },
     { id: 'contact',        label: t.nav.contact },
-  ];
+  ], [t]);
 
   const [isMenuOpen, setIsMenuOpen]                     = useState(false);
   const [activeSection, setActiveSection]               = useState('hero');
@@ -158,7 +158,7 @@ const App = () => {
         setRepos(JSON.parse(cached));
         setReposLoading(false);
         return;
-      } catch (e) {
+      } catch {
         // Invalid JSON in cache – ignore and fetch fresh data
       }
     }
@@ -215,7 +215,7 @@ const App = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lang, navItems]);  // ✅ Fixed: added navItems dependency
+  }, [lang, navItems]);
 
   /* ── Dark mode ── */
   useEffect(() => {
@@ -238,7 +238,6 @@ const App = () => {
     );
 
     els.forEach(el => {
-      // Si l'élément est déjà visible dans le viewport, révèle-le immédiatement
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
         el.classList.add('reveal-visible');
@@ -314,8 +313,12 @@ const App = () => {
       await emailjs.send(sId, tId, { ...contactForm }, pk);
       setSubmitStatus('success');
       setContactForm({ name: '', email: '', message: '' });
-    } catch { setSubmitStatus('error'); }
-    finally { setIsSubmitting(false); setTimeout(() => setSubmitStatus(''), 5000); }
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus(''), 5000);
+    }
   };
 
   const copyToClipboard = text => {
@@ -394,7 +397,6 @@ const App = () => {
     },
   ];
 
-  /* Education data for the timeline */
   const education = [
     {
       icon: GraduationCap,
